@@ -1,0 +1,44 @@
+# The following `NONE` row filter is required.
+row_filters:
+  NONE:
+    filter_sql_expr: |-
+      True
+
+# Rule dimensions are optional but let you aggregate reporting.
+rule_dimensions:
+  - consistency
+  - correctness
+  - duplication
+  - completeness
+  - conformance
+  - integrity
+
+# Rules can apply to multiple tables or columns.
+rules:
+  NOT_NULL:
+    rule_type: NOT_NULL
+    dimension: completeness
+  
+  VALID_EMAIL:
+    rule_type: REGEX
+    dimension: conformance
+    params:
+      pattern: |-
+        ^[^@]+[@]{1}[^@]+$
+    
+
+# Rule bindings associate rules to columns within tables.
+rule_bindings:
+  ID_COLUMN_NOT_NULL:
+    entity_uri: dataplex://projects/qwiklabs-gcp-01-dc7ed24d3206/locations/us-central1/lakes/customer-domain/zones/customer-raw-zone/entities/customer_raw_data
+    column_id: ID
+    row_filter_id: NONE
+    rule_ids:
+      - NOT_NULL
+  
+  EMAIL_VALID_EMAIL:
+    entity_uri: dataplex://projects/qwiklabs-gcp-01-dc7ed24d3206/locations/us-central1/lakes/customer-domain/zones/customer-raw-zone/entities/customer_raw_data
+    column_id: EMAIL
+    row_filter_id: NONE
+    rule_ids:
+      - VALID_EMAIL
